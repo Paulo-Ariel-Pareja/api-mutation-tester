@@ -1,0 +1,37 @@
+FROM node:18-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+WORKDIR /app
+
+# Copy package files for dependency installation
+COPY package*.json ./
+COPY packages/backend/package*.json ./packages/backend/
+COPY packages/shared/package*.json ./packages/shared/
+
+# Install dependencies
+RUN npm ci --only=production=false
+
+# Copy shared package source and build it
+COPY packages/shared ./packages/shared
+WORKDIR /app/packages/shared
+RUN npm run build
+
+# Copy backend package configuration files
+WORKDIR /app/packages/backend
+COPY packages/backend/nest-cli.json ./
+COPY packages/backend/tsconfig.json ./
+
+# Create directories for mounted volumes
+RUN mkdir -p src test
+
+# Set proper permissions
+RUN chown -R node:node /app
+USER node
+
+EXPOSE 3001
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,38 @@
+FROM node:18-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+WORKDIR /app
+
+# Copy package files for dependency installation
+COPY package*.json ./
+COPY packages/frontend/package*.json ./packages/frontend/
+COPY packages/shared/package*.json ./packages/shared/
+
+# Install dependencies
+RUN npm ci --only=production=false
+
+# Copy shared package source and build it
+COPY packages/shared ./packages/shared
+WORKDIR /app/packages/shared
+RUN npm run build
+
+# Copy frontend package configuration files
+WORKDIR /app/packages/frontend
+COPY packages/frontend/vite.config.ts ./
+COPY packages/frontend/tsconfig.json ./
+COPY packages/frontend/index.html ./
+
+# Create directories for mounted volumes
+RUN mkdir -p src public
+
+# Set proper permissions
+RUN chown -R node:node /app
+USER node
+
+EXPOSE 3000
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

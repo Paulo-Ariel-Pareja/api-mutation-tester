@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./packages/frontend/src:/app/packages/frontend/src
+      - ./packages/frontend/public:/app/packages/frontend/public
+      - ./packages/frontend/index.html:/app/packages/frontend/index.html
+      - ./packages/frontend/vite.config.ts:/app/packages/frontend/vite.config.ts
+      - ./packages/frontend/tsconfig.json:/app/packages/frontend/tsconfig.json
+      - ./packages/shared/src:/app/packages/shared/src
+      - ./packages/shared/dist:/app/packages/shared/dist
+      - frontend_node_modules:/app/packages/frontend/node_modules
+      - shared_node_modules:/app/packages/shared/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=http://localhost:3001
+    env_file:
+      - .env.development
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile.dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./packages/backend/src:/app/packages/backend/src
+      - ./packages/backend/test:/app/packages/backend/test
+      - ./packages/backend/nest-cli.json:/app/packages/backend/nest-cli.json
+      - ./packages/backend/tsconfig.json:/app/packages/backend/tsconfig.json
+
+      - ./packages/shared/src:/app/packages/shared/src
+      - ./packages/shared/dist:/app/packages/shared/dist
+      - backend_node_modules:/app/packages/backend/node_modules
+      - shared_node_modules:/app/packages/shared/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=debug
+    env_file:
+      - .env.development
+    stdin_open: true
+    tty: true
+
+volumes:
+  frontend_node_modules:
+  backend_node_modules:
+  shared_node_modules:
