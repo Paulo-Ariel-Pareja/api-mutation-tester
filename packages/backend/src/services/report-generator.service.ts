@@ -309,8 +309,8 @@ export class ReportGeneratorService {
         },
       };
 
-      // Convert to JSON with proper formatting
-      const jsonString = JSON.stringify(exportData, null, 2);
+      // Convert to JSON with proper formatting, handling circular references
+      const jsonString = JSON.stringify(exportData, this.getCircularReplacer(), 2);
       
       this.logger.log(`Successfully exported report ${report.testId} to JSON (${jsonString.length} characters)`);
       
@@ -407,6 +407,17 @@ export class ReportGeneratorService {
         return false;
       }
 
+      // Validate summary values
+      if (report.summary.totalTests < 0 || 
+          report.summary.successfulTests < 0 || 
+          report.summary.failedTests < 0 || 
+          report.summary.vulnerabilitiesFound < 0 || 
+          report.summary.integrityIssues < 0 || 
+          report.summary.averageResponseTime < 0) {
+        this.logger.error(`Report ${report.testId} has invalid summary values`);
+        return false;
+      }
+
       // Validate metadata
       if (!report.metadata.targetUrl || !report.metadata.executionDate) {
         this.logger.error(`Report ${report.testId} has incomplete metadata`);
@@ -419,5 +430,18 @@ export class ReportGeneratorService {
       this.logger.error(`Error validating report ${report.testId} for export:`, error);
       return false;
     }
+  }
+
+  private getCircularReplacer() {
+    const seen = new WeakSet();
+    return (key: string, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[Circular Reference]";
+        }
+        seen.add(value);
+      }
+      return value;
+    };
   }
 }

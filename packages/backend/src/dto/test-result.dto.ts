@@ -3,7 +3,8 @@ import {
   IsBoolean,
   IsNumber,
   IsOptional,
-  IsDateString,
+  IsNotEmpty,
+  IsDate,
   Min,
   Max,
 } from 'class-validator';
@@ -17,6 +18,7 @@ export class TestResultDto {
     example: '123e4567-e89b-12d3-a456-426614174001'
   })
   @IsString()
+  @IsNotEmpty()
   id: string;
 
   @ApiPropertyOptional({
@@ -33,6 +35,7 @@ export class TestResultDto {
     example: false
   })
   @IsBoolean()
+  @IsNotEmpty()
   isHappyPath: boolean;
 
   @ApiProperty({
@@ -44,6 +47,7 @@ export class TestResultDto {
   @IsNumber()
   @Min(100)
   @Max(599)
+  @IsNotEmpty()
   statusCode: number;
 
   @ApiProperty({
@@ -53,6 +57,7 @@ export class TestResultDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   responseTime: number;
 
   @ApiPropertyOptional({
@@ -75,6 +80,7 @@ export class TestResultDto {
     example: false
   })
   @IsBoolean()
+  @IsNotEmpty()
   vulnerabilityDetected: boolean;
 
   @ApiProperty({
@@ -82,6 +88,7 @@ export class TestResultDto {
     example: false
   })
   @IsBoolean()
+  @IsNotEmpty()
   integrityIssue: boolean;
 
   @ApiProperty({
@@ -90,5 +97,7 @@ export class TestResultDto {
     example: '2023-12-01T10:01:00.000Z'
   })
   @Type(() => Date)
+  @IsDate()
+  @IsNotEmpty()
   timestamp: Date;
 }
