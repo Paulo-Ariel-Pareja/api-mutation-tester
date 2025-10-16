@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest --run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:cov": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@api-mutation-tester/shared": "^1.0.0",

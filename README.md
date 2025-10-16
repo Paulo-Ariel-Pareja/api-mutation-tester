@@ -31,21 +31,19 @@ Este es un monorepo que contiene:
 ### Desarrollo Local
 
 1. **Instalar dependencias:**
+
 ```bash
 npm install
 ```
 
-2. **Compilar paquete compartido:**
-```bash
-npm run build:shared
-```
+2. **Iniciar servidores de desarrollo:**
 
-3. **Iniciar servidores de desarrollo:**
 ```bash
 npm run dev
 ```
 
 Esto iniciará:
+
 - **Frontend:** http://localhost:3000
 - **Backend:** http://localhost:3003
 
@@ -88,37 +86,43 @@ docker-compose up
 ### Tipos de Mutaciones Generadas
 
 > **✅ Soporte Completo para Métodos HTTP**
-> 
+>
 > - **GET**: Mutaciones en parámetros de URL, query parameters y headers
-> - **POST/PUT/PATCH**: Mutaciones en payload JSON y headers  
+> - **POST/PUT/PATCH**: Mutaciones en payload JSON y headers
 > - **DELETE**: Mutaciones en headers y parámetros de URL
 
 #### **1. Mutaciones de Cadenas (String)**
+
 - **`STRING_EMPTY`** - Cadenas vacías (`""`)
 - **`STRING_LONG`** - Cadenas extremadamente largas (>10,000 caracteres)
 - **`STRING_MALICIOUS`** - Payloads de inyección SQL, XSS, etc.
 
 #### **2. Mutaciones de Tipos (Type)**
+
 - **`TYPE_BOOLEAN`** - Cambiar strings/números por booleanos
 - **`TYPE_ARRAY`** - Cambiar valores por arrays
 - **`TYPE_NULL`** - Cambiar valores por `null`
 - **`TYPE_UNDEFINED`** - Cambiar valores por `undefined`
 
 #### **3. Mutaciones Numéricas (Numeric)**
+
 - **`NUMERIC_LARGE`** - Números extremadamente grandes
 - **`NUMERIC_NEGATIVE`** - Números negativos inesperados
 - **`NUMERIC_ZERO`** - Valores cero donde no se esperan
 
 #### **4. Mutaciones de Caracteres Especiales**
+
 - **`SPECIAL_CHARACTERS`** - Caracteres especiales (`!@#$%^&*()`)
 - **`UNICODE_CHARACTERS`** - Caracteres Unicode y emojis
 
 #### **5. Mutaciones de Estructura**
+
 - **`MISSING_FIELD`** - Eliminar campos requeridos
 - **`EXTRA_FIELD`** - Agregar campos inesperados
 - **`INVALID_TYPE`** - Cambiar tipos de datos esperados
 
 #### **6. Mutaciones Específicas para GET**
+
 - **Query Parameters**: Modificación de parámetros existentes con valores maliciosos
 - **Parameter Injection**: Inyección de parámetros adicionales (`debug=true`, `admin=1`)
 - **Path Traversal**: Intentos de traversal en segmentos de URL (`../`, `..%2F`)
@@ -128,27 +132,34 @@ docker-compose up
 ### Clasificación de Resultados
 
 #### **🟢 Exitosos (2xx-3xx)**
+
 - **Descripción:** El endpoint respondió correctamente
 - **Interpretación:** Comportamiento esperado o manejo adecuado de la mutación
 
 #### **🟡 Errores de Cliente (4xx)**
+
 - **Descripción:** El endpoint rechazó la petición
 - **Interpretación:** Validación correcta del input (comportamiento deseado)
 
 #### **🔴 Errores de Servidor (5xx)**
+
 - **Descripción:** El endpoint falló internamente
 - **Interpretación:** Posible problema de robustez o manejo de errores
 
 ### Detección de Vulnerabilidades
 
 #### **⚠️ Vulnerabilidades Detectadas**
+
 Se marca como vulnerabilidad cuando:
+
 - **Respuesta 2xx a payload malicioso** - El endpoint acepta datos peligrosos
 - **Información sensible expuesta** - Respuestas revelan datos internos
 - **Bypass de validación** - Mutaciones que deberían fallar son aceptadas
 
 #### **🚨 Problemas de Integridad**
+
 Se marca como problema de integridad cuando:
+
 - **Respuestas inconsistentes** - Diferentes respuestas para inputs similares
 - **Errores inesperados** - Fallos que indican problemas de implementación
 - **Timeouts o conexiones perdidas** - Problemas de estabilidad
@@ -156,6 +167,7 @@ Se marca como problema de integridad cuando:
 ### Métricas del Reporte
 
 #### **Resumen Ejecutivo**
+
 - **Total de Pruebas:** Número total de mutaciones ejecutadas
 - **Pruebas Exitosas:** Respuestas 2xx-3xx
 - **Pruebas Fallidas:** Respuestas 4xx-5xx
@@ -164,6 +176,7 @@ Se marca como problema de integridad cuando:
 - **Tiempo Promedio de Respuesta:** Rendimiento del endpoint
 
 #### **Análisis Detallado**
+
 - **Distribución de Códigos de Estado:** Gráfico de respuestas por código HTTP
 - **Estadísticas de Tiempo de Respuesta:** Min, max, promedio, percentil 95
 - **Categorización por Tipo de Mutación:** Resultados agrupados por tipo
@@ -172,23 +185,27 @@ Se marca como problema de integridad cuando:
 ## 🔧 Funcionalidades Avanzadas
 
 ### **Actualizaciones en Tiempo Real**
+
 - **Polling Connection** para monitoreo en vivo
 - **Indicadores visuales** del estado de conexión
 - **Progreso detallado** con fases de ejecución
 
 ### **Análisis de Requests**
+
 - **Detalles completos del request** enviado al endpoint
 - **Headers, payload y método** para cada mutación
 - **Descripción de la mutación** aplicada
 - **Comparación** entre request original y mutado
 
 ### **Exportación de Reportes**
+
 - **Formato JSON estructurado** con todos los detalles
 - **Metadatos de ejecución** incluidos
 - **Análisis estadístico** completo
 - **Filtros aplicados** preservados
 
 ### **Filtrado y Búsqueda**
+
 - **Filtros por categoría** (éxito, error, vulnerabilidad, integridad)
 - **Rangos de código de estado** y tiempo de respuesta
 - **Búsqueda de texto** en resultados y errores
@@ -197,17 +214,20 @@ Se marca como problema de integridad cuando:
 ## 📊 Interpretación de Resultados
 
 ### **Escenarios Ideales**
+
 - **4xx para mutaciones maliciosas** - Validación correcta
 - **Tiempos de respuesta consistentes** - Rendimiento estable
 - **Sin vulnerabilidades detectadas** - Seguridad adecuada
 
 ### **Señales de Alerta**
+
 - **2xx para payloads maliciosos** - Posible vulnerabilidad
 - **5xx frecuentes** - Problemas de robustez
 - **Timeouts o errores de conexión** - Problemas de estabilidad
 - **Información sensible en respuestas** - Posible fuga de datos
 
 ### **Acciones Recomendadas**
+
 1. **Revisar vulnerabilidades** identificadas prioritariamente
 2. **Investigar errores 5xx** para mejorar manejo de errores
 3. **Analizar patrones** en las mutaciones que causan problemas
@@ -225,9 +245,11 @@ Se marca como problema de integridad cuando:
 ## 📚 Documentación Adicional
 
 ### **API Documentation**
+
 Cuando el backend esté ejecutándose, visitar: http://localhost:3003/api/docs
 
 ### **Demo de Reportes**
+
 Para ver un ejemplo de reporte: http://localhost:3000/demo/report-viewer
 
 ## 🔒 Consideraciones de Seguridad
