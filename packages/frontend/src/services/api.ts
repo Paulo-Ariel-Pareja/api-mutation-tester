@@ -128,7 +128,14 @@ export const apiService = {
   // Get test status
   getTestStatus: async (testId: string): Promise<TestStatus> => {
     const response = await apiClient.get<TestStatus>(`/tests/${testId}/status`);
-    return response.data;
+    const data = response.data;
+    
+    // Parse date strings to Date objects
+    return {
+      ...data,
+      startTime: new Date(data.startTime),
+      endTime: data.endTime ? new Date(data.endTime) : undefined,
+    };
   },
 
   // Get test results
@@ -140,7 +147,24 @@ export const apiService = {
   // Get test report
   getTestReport: async (testId: string): Promise<Report> => {
     const response = await apiClient.get<Report>(`/tests/${testId}/report`);
-    return response.data;
+    const data = response.data;
+    
+    // Parse date strings to Date objects
+    return {
+      ...data,
+      happyPathResult: {
+        ...data.happyPathResult,
+        timestamp: new Date(data.happyPathResult.timestamp),
+      },
+      mutationResults: data.mutationResults.map(result => ({
+        ...result,
+        timestamp: new Date(result.timestamp),
+      })),
+      metadata: {
+        ...data.metadata,
+        executionDate: new Date(data.metadata.executionDate),
+      },
+    };
   },
 
   // Export test report as JSON

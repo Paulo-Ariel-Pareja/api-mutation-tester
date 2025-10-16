@@ -218,9 +218,10 @@ const ProgressMonitor: React.FC<ProgressMonitorProps> = ({
     return descriptions[phase as keyof typeof descriptions] || phase;
   };
 
-  const formatDuration = (start: Date, end?: Date) => {
-    const endTime = end || new Date();
-    const duration = endTime.getTime() - start.getTime();
+  const formatDuration = (start: Date | string, end?: Date | string) => {
+    const startTime = start instanceof Date ? start : new Date(start);
+    const endTime = end ? (end instanceof Date ? end : new Date(end)) : new Date();
+    const duration = endTime.getTime() - startTime.getTime();
     const seconds = Math.floor(duration / 1000);
     const minutes = Math.floor(seconds / 60);
     
