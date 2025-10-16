@@ -3,6 +3,8 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
+  IsNotEmpty,
+  IsDate,
   Min,
   Max,
 } from 'class-validator';
@@ -30,6 +32,7 @@ export class TestStatusDto {
     example: '123e4567-e89b-12d3-a456-426614174000'
   })
   @IsString()
+  @IsNotEmpty()
   id: string;
 
   @ApiProperty({
@@ -38,6 +41,7 @@ export class TestStatusDto {
     example: TestStatusEnum.RUNNING
   })
   @IsEnum(TestStatusEnum)
+  @IsNotEmpty()
   status: TestStatusEnum;
 
   @ApiProperty({
@@ -49,6 +53,7 @@ export class TestStatusDto {
   @IsNumber()
   @Min(0)
   @Max(100)
+  @IsNotEmpty()
   progress: number;
 
   @ApiProperty({
@@ -57,6 +62,7 @@ export class TestStatusDto {
     example: TestPhaseEnum.MUTATIONS
   })
   @IsEnum(TestPhaseEnum)
+  @IsNotEmpty()
   currentPhase: TestPhaseEnum;
 
   @ApiProperty({
@@ -66,6 +72,7 @@ export class TestStatusDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   totalMutations: number;
 
   @ApiProperty({
@@ -75,6 +82,7 @@ export class TestStatusDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   completedMutations: number;
 
   @ApiProperty({
@@ -83,6 +91,8 @@ export class TestStatusDto {
     example: '2023-12-01T10:00:00.000Z'
   })
   @Type(() => Date)
+  @IsDate()
+  @IsNotEmpty()
   startTime: Date;
 
   @ApiPropertyOptional({
@@ -91,6 +101,7 @@ export class TestStatusDto {
     example: '2023-12-01T10:05:30.000Z'
   })
   @IsOptional()
+  @IsDate()
   @Type(() => Date)
   endTime?: Date;
 }

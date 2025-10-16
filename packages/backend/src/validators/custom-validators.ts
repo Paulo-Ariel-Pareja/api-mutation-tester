@@ -22,8 +22,8 @@ export class IsValidJsonConstraint implements ValidatorConstraintInterface {
       }
     }
 
-    // If it's already an object, it's valid
-    return typeof value === "object";
+    // Allow objects and primitives (numbers, booleans, etc.)
+    return typeof value === "object" || typeof value === "number" || typeof value === "boolean";
   }
 
   defaultMessage(args: ValidationArguments) {
@@ -34,6 +34,7 @@ export class IsValidJsonConstraint implements ValidatorConstraintInterface {
 export function IsValidJson(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
+      name: 'IsValidJson',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
@@ -67,6 +68,7 @@ export class IsValidUrlConstraint implements ValidatorConstraintInterface {
 export function IsValidUrl(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
+      name: 'IsValidUrl',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
@@ -110,6 +112,7 @@ export class IsValidHeadersConstraint implements ValidatorConstraintInterface {
 export function IsValidHeaders(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
+      name: 'IsValidHeaders',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,

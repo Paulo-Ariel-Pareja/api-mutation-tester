@@ -2,6 +2,7 @@ import {
   IsString,
   IsNumber,
   IsObject,
+  IsNotEmpty,
   ValidateNested,
   Min,
 } from 'class-validator';
@@ -17,6 +18,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   totalTests: number;
 
   @ApiProperty({
@@ -26,6 +28,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   successfulTests: number;
 
   @ApiProperty({
@@ -35,6 +38,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   failedTests: number;
 
   @ApiProperty({
@@ -44,6 +48,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   vulnerabilitiesFound: number;
 
   @ApiProperty({
@@ -53,6 +58,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   integrityIssues: number;
 
   @ApiProperty({
@@ -62,6 +68,7 @@ export class ReportSummaryDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   averageResponseTime: number;
 }
 
@@ -72,6 +79,7 @@ export class ReportMetadataDto {
     example: 'https://api.example.com/users'
   })
   @IsString()
+  @IsNotEmpty()
   targetUrl: string;
 
   @ApiProperty({
@@ -80,6 +88,7 @@ export class ReportMetadataDto {
     example: '2023-12-01T10:00:00.000Z'
   })
   @Type(() => Date)
+  @IsNotEmpty()
   executionDate: Date;
 
   @ApiProperty({
@@ -89,6 +98,7 @@ export class ReportMetadataDto {
   })
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   duration: number;
 }
 
@@ -99,6 +109,7 @@ export class ReportDto {
     example: '123e4567-e89b-12d3-a456-426614174000'
   })
   @IsString()
+  @IsNotEmpty()
   testId: string;
 
   @ApiProperty({
@@ -107,6 +118,7 @@ export class ReportDto {
   })
   @ValidateNested()
   @Type(() => ReportSummaryDto)
+  @IsNotEmpty()
   summary: ReportSummaryDto;
 
   @ApiProperty({
@@ -115,6 +127,7 @@ export class ReportDto {
   })
   @ValidateNested()
   @Type(() => TestResultDto)
+  @IsNotEmpty()
   happyPathResult: TestResultDto;
 
   @ApiProperty({
@@ -123,6 +136,7 @@ export class ReportDto {
   })
   @ValidateNested({ each: true })
   @Type(() => TestResultDto)
+  @IsNotEmpty()
   mutationResults: TestResultDto[];
 
   @ApiProperty({
@@ -131,5 +145,6 @@ export class ReportDto {
   })
   @ValidateNested()
   @Type(() => ReportMetadataDto)
+  @IsNotEmpty()
   metadata: ReportMetadataDto;
 }
