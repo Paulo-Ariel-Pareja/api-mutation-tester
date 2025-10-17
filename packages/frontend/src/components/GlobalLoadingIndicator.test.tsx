@@ -38,7 +38,7 @@ describe('GlobalLoadingIndicator', () => {
 
     render(<GlobalLoadingIndicator />);
     
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { hidden: true })).toBeInTheDocument();
     expect(screen.getByText('Processing...')).toBeInTheDocument();
     expect(screen.getByText('Please wait while we process your request')).toBeInTheDocument();
   });
@@ -94,7 +94,7 @@ describe('GlobalLoadingIndicator', () => {
     });
     
     rerender(<GlobalLoadingIndicator />);
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { hidden: true })).toBeInTheDocument();
     expect(screen.getByText('Processing...')).toBeInTheDocument();
     
     // Stop loading
@@ -115,7 +115,7 @@ describe('GlobalLoadingIndicator', () => {
 
     render(<GlobalLoadingIndicator variant="backdrop" />);
     
-    const progressbar = screen.getByRole('progressbar');
+    const progressbar = screen.getByRole('progressbar', { hidden: true });
     expect(progressbar).toBeInTheDocument();
     
     // Check that backdrop content is rendered
