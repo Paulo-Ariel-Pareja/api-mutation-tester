@@ -1,13 +1,13 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { 
-  Typography, 
-  Button, 
-  Alert, 
+import { Component, ErrorInfo, ReactNode } from "react";
+import {
+  Typography,
+  Button,
+  Alert,
   Paper,
   Container,
-  Stack
-} from '@mui/material';
-import { Refresh, Home, BugReport } from '@mui/icons-material';
+  Stack,
+} from "@mui/material";
+import { Refresh, Home, BugReport } from "@mui/icons-material";
 
 interface Props {
   children: ReactNode;
@@ -39,11 +39,22 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error("Error caught by boundary:", error, errorInfo);
     this.setState({
       error,
       errorInfo,
     });
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    // Reset error state when children change
+    if (this.state.hasError && prevProps.children !== this.props.children) {
+      this.setState({
+        hasError: false,
+        error: null,
+        errorInfo: null,
+      });
+    }
   }
 
   handleReload = () => {
@@ -51,7 +62,7 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   handleReportError = () => {
@@ -64,11 +75,13 @@ class ErrorBoundary extends Component<Props, State> {
       userAgent: navigator.userAgent,
       url: window.location.href,
     };
-    
-    console.error('Error Report:', errorReport);
-    
+
+    console.error("Error Report:", errorReport);
+
     // In a real app, you would send this to your error reporting service
-    alert('Error details have been logged to the console. Please report this issue.');
+    alert(
+      "Error details have been logged to the console. Please report this issue."
+    );
   };
 
   render() {
@@ -82,25 +95,29 @@ class ErrorBoundary extends Component<Props, State> {
           <Paper elevation={3} sx={{ p: 4 }}>
             <Stack spacing={3} alignItems="center" textAlign="center">
               <BugReport color="error" sx={{ fontSize: 64 }} />
-              
+
               <Typography variant="h4" component="h1" color="error">
                 Oops! Something went wrong
               </Typography>
-              
+
               <Typography variant="body1" color="text.secondary">
-                We're sorry, but something unexpected happened. This error has been logged 
-                and we'll work to fix it as soon as possible.
+                We're sorry, but something unexpected happened. This error has
+                been logged and we'll work to fix it as soon as possible.
               </Typography>
 
-              <Alert severity="error" sx={{ width: '100%', textAlign: 'left' }}>
+              <Alert severity="error" sx={{ width: "100%", textAlign: "left" }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Error Details:
                 </Typography>
-                <Typography variant="body2" component="pre" sx={{ 
-                  whiteSpace: 'pre-wrap', 
-                  wordBreak: 'break-word',
-                  fontSize: '0.875rem'
-                }}>
+                <Typography
+                  variant="body2"
+                  component="pre"
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   {this.state.error?.toString()}
                 </Typography>
               </Alert>
@@ -113,7 +130,7 @@ class ErrorBoundary extends Component<Props, State> {
                 >
                   Reload Page
                 </Button>
-                
+
                 <Button
                   variant="outlined"
                   startIcon={<Home />}
@@ -121,7 +138,7 @@ class ErrorBoundary extends Component<Props, State> {
                 >
                   Go Home
                 </Button>
-                
+
                 <Button
                   variant="text"
                   startIcon={<BugReport />}
@@ -132,21 +149,29 @@ class ErrorBoundary extends Component<Props, State> {
                 </Button>
               </Stack>
 
-              {process.env.NODE_ENV === 'development' && this.state.errorInfo && (
-                <Alert severity="warning" sx={{ width: '100%', textAlign: 'left' }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Component Stack (Development Only):
-                  </Typography>
-                  <Typography variant="body2" component="pre" sx={{ 
-                    whiteSpace: 'pre-wrap', 
-                    fontSize: '0.75rem',
-                    maxHeight: 200,
-                    overflow: 'auto'
-                  }}>
-                    {this.state.errorInfo.componentStack}
-                  </Typography>
-                </Alert>
-              )}
+              {process.env.NODE_ENV === "development" &&
+                this.state.errorInfo && (
+                  <Alert
+                    severity="warning"
+                    sx={{ width: "100%", textAlign: "left" }}
+                  >
+                    <Typography variant="subtitle2" gutterBottom>
+                      Component Stack (Development Only):
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="pre"
+                      sx={{
+                        whiteSpace: "pre-wrap",
+                        fontSize: "0.75rem",
+                        maxHeight: 200,
+                        overflow: "auto",
+                      }}
+                    >
+                      {this.state.errorInfo.componentStack}
+                    </Typography>
+                  </Alert>
+                )}
             </Stack>
           </Paper>
         </Container>

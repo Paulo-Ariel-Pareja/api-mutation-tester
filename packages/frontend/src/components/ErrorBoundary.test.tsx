@@ -40,7 +40,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
-    expect(screen.getByText(/An unexpected error occurred/i)).toBeInTheDocument();
+    expect(screen.getByText(/something unexpected happened/i)).toBeInTheDocument();
   });
 
   it('shows error details when error occurs', () => {
@@ -71,7 +71,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText(/Please try reloading the page/i)).toBeInTheDocument();
+    expect(screen.getByText(/This error has been logged/i)).toBeInTheDocument();
   });
 
   it('catches errors from nested components', () => {
@@ -142,7 +142,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
-    expect(screen.getByText(/An unexpected error occurred/i)).toBeInTheDocument();
+    expect(screen.getByText(/Error Details:/i)).toBeInTheDocument();
   });
 
   it('handles non-Error objects thrown', () => {
@@ -166,7 +166,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText(/If this problem persists/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Report Error/i })).toBeInTheDocument();
   });
 
   it('maintains error boundary isolation', () => {

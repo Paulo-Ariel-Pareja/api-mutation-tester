@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from "react";
 import {
   Box,
   Typography,
@@ -9,15 +9,15 @@ import {
   IconButton,
   Tooltip,
   Divider,
-} from '@mui/material';
+} from "@mui/material";
 import {
   FormatAlignLeft as FormatIcon,
   Visibility as PreviewIcon,
   Code as CodeIcon,
   ContentCopy as CopyIcon,
   Clear as ClearIcon,
-} from '@mui/icons-material';
-import Editor from '@monaco-editor/react';
+} from "@mui/icons-material";
+import Editor from "@monaco-editor/react";
 
 interface JsonPayloadEditorProps {
   value: string;
@@ -57,8 +57,8 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
   placeholder = '{\n  "key": "value",\n  "number": 123,\n  "boolean": true\n}',
 }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [jsonError, setJsonError] = useState<string>('');
-  const [formattedJson, setFormattedJson] = useState<string>('');
+  const [jsonError, setJsonError] = useState<string>("");
+  const [formattedJson, setFormattedJson] = useState<string>("");
   const editorRef = useRef<any>(null);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -69,33 +69,36 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
     }
   };
 
-  const handleEditorChange = useCallback((newValue: string | undefined) => {
-    const jsonValue = newValue || '';
-    onChange(jsonValue);
-    validateJson(jsonValue);
-  }, [onChange]);
+  const handleEditorChange = useCallback(
+    (newValue: string | undefined) => {
+      const jsonValue = newValue || "";
+      onChange(jsonValue);
+      validateJson(jsonValue);
+    },
+    [onChange]
+  );
 
   const validateJson = (jsonString: string) => {
     if (!jsonString.trim()) {
-      setJsonError('');
+      setJsonError("");
       return;
     }
 
     try {
       JSON.parse(jsonString);
-      setJsonError('');
+      setJsonError("");
     } catch (error) {
       if (error instanceof Error) {
         setJsonError(`Invalid JSON: ${error.message}`);
       } else {
-        setJsonError('Invalid JSON format');
+        setJsonError("Invalid JSON format");
       }
     }
   };
 
   const formatJsonForPreview = () => {
     if (!value.trim()) {
-      setFormattedJson('');
+      setFormattedJson("");
       return;
     }
 
@@ -114,7 +117,7 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
       const parsed = JSON.parse(value);
       const formatted = JSON.stringify(parsed, null, 2);
       onChange(formatted);
-      
+
       // Focus editor after formatting
       if (editorRef.current) {
         editorRef.current.focus();
@@ -125,8 +128,8 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
   };
 
   const clearJson = () => {
-    onChange('');
-    setJsonError('');
+    onChange("");
+    setJsonError("");
     if (editorRef.current) {
       editorRef.current.focus();
     }
@@ -137,30 +140,30 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
       await navigator.clipboard.writeText(value);
     } catch (error) {
       // Fallback for older browsers
-      const textArea = document.createElement('textarea');
+      const textArea = document.createElement("textarea");
       textArea.value = value;
       document.body.appendChild(textArea);
       textArea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textArea);
     }
   };
 
   const onEditorMount = (editor: any) => {
     editorRef.current = editor;
-    
+
     // Configure editor options
     editor.updateOptions({
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
       fontSize: 14,
-      lineNumbers: 'on',
+      lineNumbers: "on",
       roundedSelection: false,
       scrollbar: {
-        vertical: 'auto',
-        horizontal: 'auto',
+        vertical: "auto",
+        horizontal: "auto",
       },
-      wordWrap: 'on',
+      wordWrap: "on",
       automaticLayout: true,
     });
   };
@@ -169,7 +172,12 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={2}
+      >
         <Typography variant="h6">Request Payload (JSON)</Typography>
         <Box display="flex" gap={1}>
           <Tooltip title="Format JSON">
@@ -208,12 +216,12 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
         </Box>
       </Box>
 
-      <Paper variant="outlined" sx={{ overflow: 'hidden' }}>
+      <Paper variant="outlined" sx={{ overflow: "hidden" }}>
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
           aria-label="JSON editor tabs"
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
+          sx={{ borderBottom: 1, borderColor: "divider" }}
         >
           <Tab
             icon={<CodeIcon />}
@@ -231,7 +239,7 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
         </Tabs>
 
         <TabPanel value={activeTab} index={0}>
-          <Box sx={{ height: 300, border: 'none' }}>
+          <Box sx={{ height: 300, border: "none" }}>
             <Editor
               height="300px"
               defaultLanguage="json"
@@ -240,12 +248,12 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
               onMount={onEditorMount}
               options={{
                 readOnly: disabled,
-                theme: 'vs-light',
+                theme: "vs-light",
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
                 fontSize: 14,
-                lineNumbers: 'on',
-                wordWrap: 'on',
+                lineNumbers: "on",
+                wordWrap: "on",
                 automaticLayout: true,
                 formatOnPaste: true,
                 formatOnType: true,
@@ -265,23 +273,32 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
         </TabPanel>
 
         <TabPanel value={activeTab} index={1}>
-          <Box sx={{ height: 300, overflow: 'auto', p: 2 }}>
+          <Box sx={{ height: 300, overflow: "auto", p: 2 }}>
             {isValidJson ? (
               <pre
                 style={{
                   margin: 0,
-                  fontFamily: 'monospace',
-                  fontSize: '14px',
+                  fontFamily: "monospace",
+                  fontSize: "14px",
                   lineHeight: 1.5,
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word',
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
                 }}
               >
-                {formattedJson || JSON.stringify(JSON.parse(value), null, 2)}
+                {formattedJson ||
+                  (() => {
+                    try {
+                      return JSON.stringify(JSON.parse(value), null, 2);
+                    } catch {
+                      return value; // Fallback to original value if parsing fails
+                    }
+                  })()}
               </pre>
             ) : (
               <Typography color="text.secondary" fontStyle="italic">
-                {value.trim() ? 'Invalid JSON - fix errors to see preview' : 'Enter JSON to see preview'}
+                {value.trim()
+                  ? "Invalid JSON - fix errors to see preview"
+                  : "Enter JSON to see preview"}
               </Typography>
             )}
           </Box>
@@ -306,7 +323,8 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
       {!value.trim() && (
         <Box sx={{ mt: 1 }}>
           <Typography variant="caption" color="text.secondary">
-            Enter valid JSON or leave empty for GET requests. Use the Format button to prettify your JSON.
+            Enter valid JSON or leave empty for GET requests. Use the Format
+            button to prettify your JSON.
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Typography variant="caption" color="text.secondary">
@@ -314,13 +332,13 @@ const JsonPayloadEditor: React.FC<JsonPayloadEditorProps> = ({
           </Typography>
           <pre
             style={{
-              margin: '8px 0 0 0',
-              padding: '8px',
-              backgroundColor: '#f5f5f5',
-              borderRadius: '4px',
-              fontSize: '12px',
-              fontFamily: 'monospace',
-              overflow: 'auto',
+              margin: "8px 0 0 0",
+              padding: "8px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontFamily: "monospace",
+              overflow: "auto",
             }}
           >
             {placeholder}
