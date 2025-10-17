@@ -82,24 +82,7 @@ export function useTestReport(testId: string | null, enabled = true) {
   });
 }
 
-export function useTestResults(testId: string | null, enabled = true) {
-  const { actions } = useAppContext();
 
-  return useQuery<Report, ApiError>({
-    queryKey: ["test-results", testId],
-    queryFn: () => apiService.getTestReport(testId!),
-    enabled: enabled && !!testId,
-    retry: 3,
-    retryDelay: 1000,
-    onError: (error) => {
-      actions.addNotification({
-        type: "error",
-        message: `Failed to load test results: ${error.message}`,
-        autoHide: true,
-      });
-    },
-  });
-}
 
 export function useExportReport() {
   const { actions } = useAppContext();

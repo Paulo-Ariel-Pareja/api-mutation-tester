@@ -434,7 +434,7 @@ describe("App", () => {
   describe("routing", () => {
     it("navigates between routes correctly", () => {
       mockLocation.pathname = "/";
-      const { rerender } = render(<TestApp />, { wrapper: createWrapper(["/progress/test-123"]) });
+      render(<TestApp />, { wrapper: createWrapper(["/progress/test-123"]) });
 
       expect(screen.getByTestId("progress-page")).toBeInTheDocument();
     });
